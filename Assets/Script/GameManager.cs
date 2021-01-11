@@ -53,10 +53,8 @@ namespace Com.ABCDE.MyApp
             {
                 Debug.LogError("我不是 Master Client, 不做載入場景的動作");
             }
-            Debug.LogFormat("載入{0}人的場景",
-                PhotonNetwork.CurrentRoom.PlayerCount);
-            PhotonNetwork.LoadLevel("Room for " +
-                PhotonNetwork.CurrentRoom.PlayerCount);
+            Debug.LogFormat("載入{0}人的場景", PhotonNetwork.CurrentRoom.PlayerCount);
+            PhotonNetwork.LoadLevel("Room for " + 1);
         }
 
         public override void OnPlayerEnteredRoom(Player other)

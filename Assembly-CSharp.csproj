@@ -311,6 +311,7 @@
     <Compile Include="Assets\Script\PlayerUI.cs" />
     <Compile Include="Assets\Script\PlayerUIMine.cs" />
     <Compile Include="Assets\TargetUI.cs" />
+    <Compile Include="Assets\ins.cs" />
     <None Include="Assets\Photon\PhotonLibs\netstandard2.0\Photon3Unity3D.xml" />
     <None Include="Assets\Photon\PhotonUnityNetworking\changelog.txt" />
     <None Include="Assets\Photon\PhotonUtilities\PackObject\_GeneratedPackExtensions\PackObject Extensions.txt" />

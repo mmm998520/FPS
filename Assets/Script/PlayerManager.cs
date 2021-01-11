@@ -142,7 +142,14 @@ namespace Com.ABCDE.MyApp
 
         void Move()
         {
-            GetComponent<Rigidbody>().velocity = transform.rotation * new Vector3(Input.GetAxis("Horizontal") * 3, GetComponent<Rigidbody>().velocity.y, Input.GetAxis("Vertical") * 3);
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                GetComponent<Rigidbody>().velocity = transform.rotation * new Vector3(Input.GetAxis("Horizontal") * 6, GetComponent<Rigidbody>().velocity.y, Input.GetAxis("Vertical") * 6);
+            }
+            else
+            {
+                GetComponent<Rigidbody>().velocity = transform.rotation * new Vector3(Input.GetAxis("Horizontal") * 3, GetComponent<Rigidbody>().velocity.y, Input.GetAxis("Vertical") * 3);
+            }
             transform.Rotate(0, Input.GetAxis("Mouse X") * 10, 0);
             animator.SetBool("Run", GetComponent<Rigidbody>().velocity.magnitude > 0.01f);
         }
@@ -162,7 +169,7 @@ namespace Com.ABCDE.MyApp
                     }
                     RaycastHit hit;
                     animator.SetTrigger("Shoot");
-                    if (Physics.Raycast(new Ray(transform.position, transform.forward * 100), out hit))
+                    if (Physics.Raycast(new Ray(transform.position, transform.forward * 200), out hit))
                     {
                         Debug.LogError(hit.collider.name + " : A", hit.collider.gameObject);
                         PlayerManager playerManager = hit.collider.GetComponent<PlayerManager>();
