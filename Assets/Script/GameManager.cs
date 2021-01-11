@@ -15,7 +15,7 @@ namespace Com.ABCDE.MyApp
 
         void Awake()
         {
-
+            Cursor.visible = false;
             if (playerPrefab == null)
             {
                 Debug.LogError("playerPrefab 遺失, 請在 Game Manager 重新設定",
@@ -27,8 +27,7 @@ namespace Com.ABCDE.MyApp
                 {
                     Debug.LogFormat("我們從 {0} 動態生成玩家角色", SceneManagerHelper.ActiveSceneName);
 
-                    PhotonNetwork.Instantiate(this.playerPrefab.name,
-                        new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
                 }
                 else
                 {
@@ -37,6 +36,19 @@ namespace Com.ABCDE.MyApp
             }
             Instance = this;
         }
+
+        private void Update()
+        {
+            if (Input.GetKey(KeyCode.LeftAlt))
+            {
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.visible = false;
+            }
+        }
+
         // 玩家離開遊戲室時, 把他帶回到遊戲場入口
         public override void OnLeftRoom()
         {
@@ -73,8 +85,7 @@ namespace Com.ABCDE.MyApp
             Debug.LogFormat("{0} 離開遊戲室", other.NickName);
             if (PhotonNetwork.IsMasterClient)
             {
-                Debug.LogFormat("我是 Master Client 嗎? {0}",
-                    PhotonNetwork.IsMasterClient);
+                Debug.LogFormat("我是 Master Client 嗎? {0}", PhotonNetwork.IsMasterClient);
                 LoadArena();
             }
         }

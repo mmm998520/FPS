@@ -24,7 +24,9 @@ namespace Com.ABCDE.MyApp
         float characterControllerHeight = 0f;
         Transform targetTransform;
         Vector3 targetPosition;
+        bool hitPlayer = false;
 
+        public static Transform MyPlayerManager;
         void Awake()
         {
             this.transform.SetParent(GameObject.Find("Canvas").GetComponent<Transform>(), false);
@@ -39,6 +41,51 @@ namespace Com.ABCDE.MyApp
                 return;
             }
             targetTransform = target.transform;
+            hitPlayer = false;
+            if(Vector3.Angle(MyPlayerManager.forward,targetTransform.position- MyPlayerManager.position)<45)
+            {
+                for(int i = 0; i < 12; i++)
+                {
+                    RaycastHit hit;
+                    if (Physics.Raycast(new Ray(Camera.main.transform.position, target.HitPoses[i].position - Camera.main.transform.position), out hit))
+                    {
+                        if (hit.collider.transform == targetTransform)
+                        {
+                            hitPlayer = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (hitPlayer)
+            {
+                Debug.LogError("hit");
+            }
+            else
+            {
+                Debug.LogError("nothit");
+            }
+            /*
+            for (int i = 0; i < Screen.width; i += Screen.width / 100)
+            {
+                for (int j = 0; j < Screen.height; j += Screen.height / 100)
+                {
+                    RaycastHit hit;
+                    if (Physics.Raycast(new Ray(Camera.main.transform.position, Camera.main.ScreenToWorldPoint(new Vector3(i,j,50))), out hit))
+                    {
+                        if(hit.collider.transform == targetTransform)
+                        {
+                            hitPlayer = true;
+                        }
+                    }
+                }
+                if (hitPlayer)
+                {
+                    break;
+                }
+            }
+            */
+
             if (playerHealthSlider != null)
             {
                 playerHealthSlider.value = target.HP;
@@ -47,11 +94,17 @@ namespace Com.ABCDE.MyApp
 
         void LateUpdate()
         {
-            if (targetTransform != null)
+            if (hitPlayer)
             {
-                targetPosition = targetTransform.GetComponent<PlayerManager>().NamePos.position;
-                this.transform.position = Camera.main.WorldToScreenPoint(targetPosition);
-
+                if (targetTransform != null)
+                {
+                    targetPosition = targetTransform.GetComponent<PlayerManager>().NamePos.position;
+                    this.transform.position = Camera.main.WorldToScreenPoint(targetPosition);
+                }
+            }
+            else
+            {
+                this.transform.position = Vector3.right * 999999;
             }
         }
 

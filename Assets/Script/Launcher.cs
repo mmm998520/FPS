@@ -23,6 +23,7 @@ namespace Com.ABCDE.MyApp
 
         void Awake()
         {
+            Cursor.visible = true;
             // 確保所有連線的玩家均載入相同的遊戲場景
             PhotonNetwork.AutomaticallySyncScene = true;
         }

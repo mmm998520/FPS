@@ -9,9 +9,7 @@ namespace Com.ABCDE.MyApp
     public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         [Tooltip("指標- GameObject Beams")]
-        [SerializeField]
-        //private GameObject beams;
-        private GameObject Bullet;
+        public Transform[] HitPoses;
         bool IsFiring;
         public float FiringTimer;
         [Tooltip("玩家的血量")]
@@ -52,6 +50,7 @@ namespace Com.ABCDE.MyApp
                     HPofMine = 1;
                     ShootTimer = 10;
                     ShootIt = false;
+                    PlayerUI.MyPlayerManager = transform;
                     _cameraWork.OnStartFollowing();
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -150,7 +149,16 @@ namespace Com.ABCDE.MyApp
             {
                 GetComponent<Rigidbody>().velocity = transform.rotation * new Vector3(Input.GetAxis("Horizontal") * 3, GetComponent<Rigidbody>().velocity.y, Input.GetAxis("Vertical") * 3);
             }
-            transform.Rotate(0, Input.GetAxis("Mouse X") * 10, 0);
+            if (!Input.GetKey(KeyCode.LeftAlt))
+            {
+                transform.Rotate(0, Input.GetAxis("Mouse X") * 10, 0);
+                float mouseY = Input.GetAxis("Mouse Y") * 0.01f;
+                if ((CameraWorkSet.originCenterY >= 1.9f && CameraWorkSet.originCenterY <= 2.2f) || (CameraWorkSet.originCenterY > 2.2f && mouseY < 0) || (CameraWorkSet.originCenterY < 1.9f && mouseY > 0))
+                {
+                    CameraWorkSet.originCenterY += mouseY;
+                    CameraWorkSet.centerOffsetY += mouseY;
+                }
+            }
             animator.SetBool("Run", GetComponent<Rigidbody>().velocity.magnitude > 0.01f);
         }
 
@@ -169,7 +177,7 @@ namespace Com.ABCDE.MyApp
                     }
                     RaycastHit hit;
                     animator.SetTrigger("Shoot");
-                    if (Physics.Raycast(new Ray(transform.position, transform.forward * 200), out hit))
+                    if (Physics.Raycast(new Ray(Camera.main.transform.position, Camera.main.ScreenToWorldPoint(new Vector3(Screen.width/2,Screen.height/2, 200)) - Camera.main.transform.position), out hit))
                     {
                         Debug.LogError(hit.collider.name + " : A", hit.collider.gameObject);
                         PlayerManager playerManager = hit.collider.GetComponent<PlayerManager>();
