@@ -41,7 +41,7 @@ namespace Com.ABCDE.MyApp
             targetTransform = target.transform;
             if (playerHealthSlider != null)
             {
-                playerHealthSlider.value = target.Health;
+                playerHealthSlider.value = target.HP;
             }
         }
 

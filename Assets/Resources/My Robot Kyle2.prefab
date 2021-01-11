@@ -821,9 +821,10 @@ GameObject:
   - component: {fileID: 2264158385934730441}
   - component: {fileID: 925740647813365443}
   - component: {fileID: 2586633215996306253}
+  - component: {fileID: 2288337447984559569}
   m_Layer: 0
   m_Name: My Robot Kyle2
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -889,10 +890,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Bullet: {fileID: 0}
   FiringTimer: 0
-  Health: 1
+  HP: 1
   PlayerUIPrefab: {fileID: 3954125328865830268, guid: f0c5e35b95d5dbe40a9b570658d481f1,
-    type: 3}
-  PlayerUIMinePrefab: {fileID: 3954125328865830268, guid: c0076b5c49db79442972dc2d73369d76,
     type: 3}
   NamePos: {fileID: 4618557391727491753}
 --- !u!114 &8979079003824802601
@@ -1009,6 +1008,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2288337447984559569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7484202672358939515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fcfa032a44fd264797dbeaaf4ed581a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7484202672358939517
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ namespace Com.ABCDE.MyApp
         [Tooltip("Prefab- 玩家的角色")]
         public GameObject playerPrefab;
 
-        void Start()
+        void Awake()
         {
 
             if (playerPrefab == null)

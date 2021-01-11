@@ -29,7 +29,7 @@ namespace Photon.Pun.Demo.PunBasics
 	    
 	    [Tooltip("Allow the camera to be offseted vertically from the target, for example giving more view of the sceneray and less ground.")]
 	    [SerializeField]
-	    private Vector3 centerOffset = Vector3.zero;
+	    public Vector3 centerOffset = Vector3.zero;
 
 	    [Tooltip("Set this as false if a component of a prefab being instanciated by Photon Network, and manually call OnStartFollowing() when and if needed.")]
 	    [SerializeField]

@@ -15,15 +15,19 @@ namespace Com.ABCDE.MyApp
         bool IsFiring;
         public float FiringTimer;
         [Tooltip("玩家的血量")]
-        public float Health = 1f;
+        public float HP = 1f;
         [Tooltip("玩家角色的 instance")]
         public static GameObject LocalPlayerInstance;
         [Tooltip("指標- GameObject PlayerUI")]
         [SerializeField]
         public GameObject PlayerUIPrefab;
-        public GameObject PlayerUIMinePrefab;
+        //public GameObject PlayerUIMinePrefab;
         Animator animator;
         public Transform NamePos;
+
+        public static float HPofMine;
+        public static float ShootTimer;
+        public static bool ShootIt;
 
         void Awake()
         {
@@ -41,11 +45,13 @@ namespace Com.ABCDE.MyApp
         void Start()
         {
             CameraWork _cameraWork = gameObject.GetComponent<CameraWork>();
-
             if (_cameraWork != null)
             {
                 if (photonView.IsMine)
                 {
+                    HPofMine = 1;
+                    ShootTimer = 10;
+                    ShootIt = false;
                     _cameraWork.OnStartFollowing();
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,6 +61,13 @@ namespace Com.ABCDE.MyApp
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 }
+                else
+                {
+                    if (GetComponent<CameraWorkSet>())
+                    {
+                        GetComponent<CameraWorkSet>().enabled = false;
+                    }
+                }
             }
             else
             {
@@ -62,15 +75,7 @@ namespace Com.ABCDE.MyApp
             }
             if (photonView.IsMine)
             {
-                if (PlayerUIMinePrefab != null)
-                {
-                    GameObject _uiGo = Instantiate(PlayerUIMinePrefab);
-                    _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
-                }
-                else
-                {
-                    Debug.LogWarning("指標- GameObject PlayerUIMine 為空值", this);
-                }
+
             }
             else
             {
@@ -101,9 +106,11 @@ namespace Com.ABCDE.MyApp
         {
             if (photonView.IsMine)
             {
-                ProcessInputs();
+                ShootTimer += Time.deltaTime;
+                Fire();
                 Move();
-                if (Health <= 0f)
+                HPofMine = HP;
+                if (HP <= 0f)
                 {
                     GameManager.Instance.LeaveRoom();
                 }
@@ -140,14 +147,19 @@ namespace Com.ABCDE.MyApp
             animator.SetBool("Run", GetComponent<Rigidbody>().velocity.magnitude > 0.01f);
         }
 
-        void ProcessInputs()
+        void Fire()
         {
             // 按下發射鈕
             if (Input.GetButtonDown("Fire1"))
             {
                 Debug.LogError(animator.GetCurrentAnimatorStateInfo(0).IsName("assault_combat_shoot"));
-                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("assault_combat_shoot"))
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("assault_combat_shoot") && ShootTimer > 0.5f)
                 {
+                    ShootTimer = 0;
+                    if(CameraWorkSet.centerOffsetY < CameraWorkSet.originCenterY + 0.1f)
+                    {
+                        CameraWorkSet.centerOffsetY += 0.015f;
+                    }
                     RaycastHit hit;
                     animator.SetTrigger("Shoot");
                     if (Physics.Raycast(new Ray(transform.position, transform.forward * 100), out hit))
@@ -157,6 +169,11 @@ namespace Com.ABCDE.MyApp
                         if (playerManager && playerManager != this)
                         {
                             playerManager.hurt();
+                            ShootIt = true;
+                        }
+                        else
+                        {
+                            ShootIt = false;
                         }
                     }
                     if (!IsFiring)
@@ -177,7 +194,7 @@ namespace Com.ABCDE.MyApp
         [PunRPC]
         public void RPCHurt()
         {
-            GetComponent<PlayerManager>().Health -= 0.1f;
+            GetComponent<PlayerManager>().HP -= 0.1f;
             Debug.LogError(gameObject.name + " : C", gameObject);
         }
         /*
